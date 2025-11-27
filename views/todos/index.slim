@@ -1,21 +1,45 @@
-h1 sök efter en todo
+.container
+  .header-section
+    h1 Min ToDo-lista
+    .new-todo-section
+      h2 Lägg till ny uppgift
+      a.btn-new href="/todos/new" + Skapa ny ToDo
 
-form action="/todos" method="get"
-  input name="q" placeholder="Sök på todo" type="text"
-  input type="submit" value="sök"
+  .search-form
+    form action="/todos" method="get" 
+      input type="text" name="q" placeholder="Sök todos..." 
+      input type="submit" value="Sök"
 
-h1 Alla todoer 
-
-
-
-- @datatodo.each do |todo|
-  h2 
-   a href="/todos/#{todo["id"]}/edit" #{todo["name"]}
-  p #{todo["amount"]}
-  form action="/todos/#{todo
-  ["id"]}/delete" method="post" 
-    input type="submit" value="🔥DELETE"
-  hr 
-  
-
-end 
+  .todos-section
+    - if @datatodo && @datatodo.length > 0
+      table
+        thead
+          tr
+            th Namn
+            th Beskrivning
+            th Kategori
+            th Status
+            th Åtgärder
+        tbody
+          - @datatodo.each do |todo|
+            tr class="#{todo["completed"] == 1 ? "completed" : ""}"
+              td
+                = todo["name"]
+              td
+                = todo["description"]
+              td
+                = todo["category"]
+              td
+                form action="/todos/#{todo["id"]}/toggle" method="post" style="display:inline;"
+                  - if todo["completed"] == 1
+                    input type="submit" value="✓ Färdig" class="btn-undo"/
+                  - else
+                    input type="submit" value="◯ Markera färdig" class="btn-complete"/
+              td
+                a href="/todos/#{todo["id"]}/edit" class="btn-change" Redigera
+                form action="/todos/#{todo["id"]}/delete" method="post" style="display:inline;"
+                  input type="submit" value="Radera" class="btn-delete" onclick="return confirm('Är du säker?');"/
+    - else
+      .empty-message
+        p Du har inga todos än!
+        a href="/todos/new" class="btn" Skapa din första ToDo

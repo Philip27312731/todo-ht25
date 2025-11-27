@@ -1,6 +1,36 @@
-h2 ●'◡'● Uppdatera din todo ●'◡'●
+.form-container
+  h2 Uppdatera ToDo
 
-form action="/todos/#{@special_todo["id"]}/update" method="post"
-  input type="text" name="name" value="#{@special_todo["name"]}"
-  input type="number" name="amount" value="#{@special_todo["amount"]}"
-  input type="submit" value="❤️Uppdatera ¯\_( ͡° ͜ʖ ͡°)_/¯❤️"
+  form action="/todos/#{@special_todo["id"]}/update" method="post"
+    .form-group
+      label Uppgift
+      input type="text" name="name" value="#{@special_todo["name"]}" required="true"/
+    .form-group
+      label Beskrivning
+      textarea name="description"
+        = @special_todo["description"]
+    .form-group
+      label Prioritet
+      input type="number" name="amount" value="#{@special_todo["amount"]}"/
+    .form-group
+      label Kategori
+      select name="category"
+        - if @special_todo["category"] == "privat"
+          option value="privat" selected="selected" Privat
+        - else
+          option value="privat" Privat
+        - if @special_todo["category"] == "arbete"
+          option value="arbete" selected="selected" Arbete
+        - else
+          option value="arbete" Arbete
+        - if @special_todo["category"] == "shopping"
+          option value="shopping" selected="selected" Shopping
+        - else
+          option value="shopping" Shopping
+    .form-actions
+      input type="submit" value="Uppdatera" class="btn-save"/
+      a.btn-cancel href="/todos" Avbryt
+
+  .delete-form
+    form action="/todos/#{@special_todo["id"]}/delete" method="post"
+      input type="submit" value="Radera denna uppgift" class="btn-delete-large" onclick="return confirm('Är du säker? Denna åtgärd kan inte ångras.');"/

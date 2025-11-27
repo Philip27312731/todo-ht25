@@ -1,7 +1,25 @@
-form action="/todo" method="post"
- input type="text" name="new_todo" placeholder="Namnge ny todo"
- input type="number" name="amount" placeholder="1"
- input type="submit" value="Lägg till"
+.form-container
+  h2 Skapa ny ToDo
+
+  form action="/todos" method="post"
+    .form-group
+      label Uppgift
+      input type="text" name="new_todo" placeholder="Vad behöver du göra?" required="true"/
+    .form-group
+      label Beskrivning
+      textarea name="description" placeholder="Lägg till detaljer..."
+    .form-group
+      label Prioritet
+      input type="number" name="amount" placeholder="1" value="1" min="1" max="5"/
+    .form-group
+      label Kategori
+      select name="category"
+        option value="privat" Privat
+        option value="arbete" Arbete
+        option value="shopping" Shopping
+    .form-actions
+      input type="submit" value="Lägg till" class="btn-save"/
+      a.btn-cancel href="/todos" Avbryt
 
 
 
