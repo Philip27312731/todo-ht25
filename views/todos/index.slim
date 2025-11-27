@@ -1,0 +1,21 @@
+h1 sök efter en todo
+
+form action="/todos" method="get"
+  input name="q" placeholder="Sök på todo" type="text"
+  input type="submit" value="sök"
+
+h1 Alla todoer 
+
+
+
+- @datatodo.each do |todo|
+  h2 
+   a href="/todos/#{todo["id"]}/edit" #{todo["name"]}
+  p #{todo["amount"]}
+  form action="/todos/#{todo
+  ["id"]}/delete" method="post" 
+    input type="submit" value="🔥DELETE"
+  hr 
+  
+
+end 
