@@ -6,6 +6,27 @@ require 'sinatra/reloader' if development?
 # Konfigurera Sinatra för att hitta statiska filer
 set :public_folder, 'public'
 
+enable :sessions
+
+
+#Körs ifrån ett formulär
+post('/login') do
+ nameAndSecret = [params[:namn],params[:password]]
+ session[:things] = nameAndSecret #Sparas i session
+ redirect('/result')#Posten skickas till Geten!
+end
+
+get('/result') do
+ slim(:result) 
+end
+
+#Länk som tömmer session (blir 'nil')
+get('/clear_session) do
+ session.clear
+ slim(:login)
+end
+
+
 # Databashjälpare
 def db
   database = SQLite3::Database.new('db/todos.db')
