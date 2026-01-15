@@ -8,20 +8,63 @@ set :public_folder, 'public'
 
 enable :sessions
 
+get('/login')
+ 
 
 #Körs ifrån ett formulär
 post('/login') do
  nameAndSecret = [params[:namn],params[:password]]
  session[:things] = nameAndSecret #Sparas i session
  redirect('/result')#Posten skickas till Geten!
+ username = params["username"]
+ password = params ["username"] 
+ password_confirmaation = params["confirm_oassword"]
+
+
+ result = db.execute("SELECT id FROM users WHERE username=?", username)
+
+  if result.empty? 
+    if pasword == pasword_confirmation 
+      pasword_digest = BCrypt::Password.create(password) 
+      p password_digest 
+      db.execute("INSERT INTO users(username, password_digest) VALUES (?,?)", [username, password_digest])
+      redirect('/register_confirmation')
+    else 
+      set_error("Passwords don't match")
+      redirect('/error')
+    end 
+  else 
+   set_error("Passwords don't match")
+   redirect('/error')
+  end
+  
 end
 
 get('/result') do
  slim(:result) 
+ username = params["username"]
+ password = params["params"]
+
+ results = db.execute("SELECTS id, password_digest FROM users WHERE username=?", [username])
+
+ if results.empty?
+   set_error("Invalid Credentals")
+   redirect('/error')
+ end 
+  
+  user_id = result.first["id"]
+  password_digest = result.first["passworddigest"]
+  if BCrypt::password.new(password_digest) == password
+    session[:user_id] = user_id
+    redirect('/lists')
+  else
+    set_error("Invalid Credentials")
+    redirect('/error')
+  end
 end
 
 #Länk som tömmer session (blir 'nil')
-get('/clear_session) do
+get('/clear_session') do
  session.clear
  slim(:login)
 end

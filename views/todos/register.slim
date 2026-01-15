@@ -1,0 +1,21 @@
+   username = params["username"]
+   password = params ["username"] 
+   password_confirmaation = params["confirm_oassword"]
+
+
+   result = db.execute("SELECT id FROM users WHERE username=?", username)
+
+   if result.empty? 
+     if pasword == pasword_confirmation 
+       pasword_digest = BCrypt::Password.create(password) 
+       p password_digest 
+       db.execute("INSERT INTO users(username, password_digest) VALUES (?,?)", [username, password_digest])
+       redirect('/register_confirmation')
+     else 
+       set_error("Passwords don't match")
+       redirect('/error')
+     end 
+    else 
+      set_error(Passwords don't match")
+      redirect('/error')
+    end 
