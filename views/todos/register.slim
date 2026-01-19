@@ -1,3 +1,12 @@
-form action="/register" method="post" 
- input type="text" name="nyckel"
- inout type="submit" value="Skapa lösernod"
+- if @error
+  .error
+    p = @error
+
+form action="/register" method="post"
+  input type="text" name="username" placeholder="Användarnamn"
+  input type="password" name="password" placeholder="Lösenord"
+  input type="password" name="confirm_password" placeholder="Bekräfta lösenord"
+  input type="submit" value="Skapa konto"
+
+p
+  a href="/login" Redan medlem? Logga in
